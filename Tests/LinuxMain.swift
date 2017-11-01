@@ -2,5 +2,6 @@ import XCTest
 @testable import ProrsumNetTests
 
 XCTMain([
-    testCase(ProrsumNetTests.allTests),
+    testCase(TCPTests.allTests),
+    testCase(UDPTests.allTests)
 ])
