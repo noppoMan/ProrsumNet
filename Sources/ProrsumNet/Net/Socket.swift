@@ -145,8 +145,6 @@ public class Socket: SocketType {
             throw SocketError.alreadyClosed
         }
         
-        try self.setBlocking(shouldBlock: true)
-        
         var buf = Bytes(repeating: 0, count: numOfBytes)
         let bytesRead = sys_recv(fd, &buf, numOfBytes, 0)
         
