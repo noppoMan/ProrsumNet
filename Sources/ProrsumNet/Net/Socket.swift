@@ -138,6 +138,19 @@ public class Socket: SocketType {
             throw SystemError.lastOperationError!
         }
         self.init(fd: fd, addressFamily: addressFamily, sockType: sockType, protocolType: protocolType)
+        #if !os(Linux)
+            var on: Int32 = 1
+            let r = setsockopt(
+                self.fd,
+                SOL_SOCKET,
+                SO_NOSIGPIPE,
+                &on,
+                socklen_t(MemoryLayout<Int32>.size)
+            )
+            if r < 0 {
+                throw SystemError.lastOperationError ?? SystemError.other(errorNumber: -1)
+            }
+        #endif
     }
     
     public func recv(upTo numOfBytes: Int = 1024, deadline: Double = 0) throws -> Bytes {
