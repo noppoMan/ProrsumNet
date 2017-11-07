@@ -67,11 +67,14 @@ public protocol SocketType: class {
     var sockType: SockType { get }
     var protocolType: ProtocolType { get }
     var isClosed: Bool { get set }
+    var isBlocking: Bool { get }
+    
+    func setBlocking(shouldBlock: Bool) throws
 }
 
 extension SocketType {
     
-    public func setBlocking(shouldBlock: Bool) throws {
+    public static func setBlocking(fd: Int32, shouldBlock: Bool) throws {
         let flags = fcntl(fd, F_GETFL, 0)
         if flags < 0 {
             throw SystemError.lastOperationError!
@@ -85,8 +88,6 @@ extension SocketType {
     }
     
     public func connect(host: String, port: UInt) throws {
-        try setBlocking(shouldBlock: true)
-        
         let address = Address(host: host, port: port, addressFamily: .inet)
         let resolvedAddress = try address.resolve(sockType: sockType, protocolType: protocolType)
         
@@ -125,6 +126,12 @@ public class Socket: SocketType {
     
     public var isClosed = false
     
+    private var _isBlocking = true
+    
+    public var isBlocking: Bool {
+        return _isBlocking
+    }
+    
     public init(fd: Int32, addressFamily: AddressFamily, sockType: SockType, protocolType: ProtocolType){
         self.addressFamily = addressFamily
         self.sockType = sockType
@@ -151,6 +158,11 @@ public class Socket: SocketType {
                 throw SystemError.lastOperationError ?? SystemError.other(errorNumber: -1)
             }
         #endif
+    }
+    
+    public func setBlocking(shouldBlock: Bool) throws {
+        try Socket.setBlocking(fd: fd, shouldBlock: shouldBlock)
+        _isBlocking = shouldBlock
     }
     
     public func recv(upTo numOfBytes: Int = 1024, deadline: Double = 0) throws -> Bytes {
@@ -191,3 +203,4 @@ public class Socket: SocketType {
         }
     }
 }
+
