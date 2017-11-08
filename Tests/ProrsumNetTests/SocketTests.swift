@@ -55,4 +55,11 @@ class SocketTests: XCTestCase {
             XCTAssertTrue(socket.isBlocking, "socket is blocking mode")
         }
     }
+    
+    static var allTests : [(String, (SocketTests) -> () throws -> Void)] {
+        return [
+            ("testCreate", testCreate),
+            ("testSetBlocking", testSetBlocking)
+        ]
+    }
 }
