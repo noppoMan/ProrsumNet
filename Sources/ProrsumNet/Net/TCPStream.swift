@@ -22,6 +22,7 @@ public class TCPStream: DuplexStream {
     
     public convenience init() throws {
         try self.init(socket: TCPSocket())
+        try socket.setBlocking(shouldBlock: true)
     }
     
     public convenience init(host: String, port: UInt) throws {

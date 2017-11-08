@@ -24,6 +24,12 @@ public class UDPSocket: SocketType {
     
     public var isClosed = false
     
+    private var _isBlocking = true
+    
+    public var isBlocking: Bool {
+        return _isBlocking
+    }
+    
     public init(fd: Int32, addressFamily: AddressFamily) throws {
         self.addressFamily = addressFamily
         self.sockType = .dgram
@@ -37,6 +43,11 @@ public class UDPSocket: SocketType {
             throw SystemError.lastOperationError!
         }
         try self.init(fd: fd, addressFamily: addressFamily)
+    }
+    
+    public func setBlocking(shouldBlock: Bool) throws {
+        try UDPSocket.setBlocking(fd: fd, shouldBlock: shouldBlock)
+        _isBlocking = shouldBlock
     }
     
     public func recvfrom(upTo numOfBytes: Int = 1024, deadline: Double = 0) throws -> (Bytes, Address) {
