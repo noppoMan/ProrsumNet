@@ -59,6 +59,7 @@ extension ProtocolType {
 
 public enum SocketError: Error {
     case alreadyClosed
+    case addressIsNotResolved
 }
 
 public protocol SocketType: class {
@@ -87,14 +88,21 @@ extension SocketType {
         }
     }
     
-    public func connect(host: String, port: UInt) throws {
-        let address = Address(host: host, port: port, addressFamily: .inet)
-        let resolvedAddress = try address.resolve(sockType: sockType, protocolType: protocolType)
+    public func connect(withResolvedAddress resolvedAddress: Address) throws {
+        if !resolvedAddress.isResolved {
+            throw SocketError.addressIsNotResolved
+        }
         
         let r = sys_connect(fd, resolvedAddress.rawaddr!, resolvedAddress.len)
         if r < 0 {
             throw SystemError.lastOperationError!
         }
+    }
+    
+    public func connect(host: String, port: UInt) throws {
+        let address = Address(host: host, port: port, addressFamily: .inet)
+        let resolvedAddress = try address.resolve(sockType: sockType, protocolType: protocolType)
+        try connect(withResolvedAddress: resolvedAddress)
     }
     
     public func bind(host: String, port: UInt) throws {
