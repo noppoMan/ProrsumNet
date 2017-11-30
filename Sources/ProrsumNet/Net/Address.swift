@@ -61,6 +61,7 @@ public enum AddressError: Error {
     case unsupportedAddressFamily
     case addressIsAlreadyResolved
     case unknownAddressFamily
+    case couldNotResolve(host: String, port: UInt, reason: String)
 }
 
 public class Address {
@@ -149,7 +150,7 @@ public class Address {
 
         let ret = getaddrinfo(host, String(port), &hints, &addrInfoRef)
         guard ret == 0 else {
-            throw SystemError.lastOperationError!
+            throw SystemError.lastOperationError ?? AddressError.couldNotResolve(host: host, port: port, reason: "Unknown")
         }
         
         guard let addrList = addrInfoRef else {
