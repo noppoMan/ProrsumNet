@@ -137,7 +137,7 @@ public final class SSLSocket {
         
         let pointer = UnsafeMutablePointer<UInt8>.allocate(capacity: max)
         defer {
-            pointer.deallocate(capacity: max)
+            pointer.deallocate()
         }
         
         let result = tls_read(context, pointer, max)
