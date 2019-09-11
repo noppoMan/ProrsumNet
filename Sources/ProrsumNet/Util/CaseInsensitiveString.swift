@@ -29,8 +29,13 @@ public struct CaseInsensitiveString {
 }
 
 extension CaseInsensitiveString : Hashable {
+    
     public var hashValue: Int {
         return string.lowercased().hashValue
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.string.lowercased().hashValue)
     }
 }
 
