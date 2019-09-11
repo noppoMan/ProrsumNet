@@ -65,14 +65,14 @@ public enum Certificates {
 }
 
 extension Certificates {
-    @available(*, deprecated: 1.0, message: "Use `.openbsd` instead.")
+    @available(*, deprecated, message: "Use `.openbsd` instead.")
     public static var mozilla: Certificates {
-        return .certificateAuthority(signature: .signedBytes(caCertificateBytes: mozilla_certs_pem.bytes))
+        return .certificateAuthority(signature: .signedBytes(caCertificateBytes: Array(mozilla_certs_pem.utf8)))
     }
 }
 
 extension Certificates {
     public static var openbsd: Certificates {
-        return .certificateAuthority(signature: .signedBytes(caCertificateBytes: openbsd_certs_pem.bytes))
+        return .certificateAuthority(signature: .signedBytes(caCertificateBytes: Array(openbsd_certs_pem.utf8)))
     }
 }

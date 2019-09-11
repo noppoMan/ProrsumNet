@@ -9,18 +9,9 @@
 import Foundation
 
 extension Data {
+
     public static var empty: Data {
         return Data()
-    }
-    
-    public var bytes: Bytes {
-        return self.withUnsafeBytes {
-            [UInt8](UnsafeBufferPointer(start: $0, count: data.count))
-        }
-    }
-    
-    public subscript(bounds: CountableRange<Int>) -> Data {
-        return Data(bytes[bounds])
     }
 }
 

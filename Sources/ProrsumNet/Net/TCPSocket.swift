@@ -37,7 +37,7 @@ public final class TCPSocket: Socket {
         let addr = UnsafeMutablePointer<sockaddr_storage>.allocate(capacity: 1)
         let addrSockAddr = UnsafeMutablePointer<sockaddr>(OpaquePointer(addr))
         defer {
-            addr.deallocate(capacity: 1)
+            addr.deallocate()
         }
         
         let clientFD = sys_accept(fd, addrSockAddr, &length)

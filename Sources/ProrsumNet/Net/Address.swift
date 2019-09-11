@@ -115,7 +115,7 @@ public class Address {
             self.addressFamily = addressFamily
             self.isResolved = isResolved
             
-            strData.deallocate(capacity: Int(maxLen))
+            strData.deallocate()
             
         case .inet6:
             let maxLen = socklen_t(INET6_ADDRSTRLEN)
@@ -129,7 +129,7 @@ public class Address {
             self.addressFamily = addressFamily
             self.isResolved = isResolved
             
-            strData.deallocate(capacity: Int(maxLen))
+            strData.deallocate()
         default:
             throw AddressError.unsupportedAddressFamily
         }
@@ -191,7 +191,7 @@ public class Address {
     }
     
     deinit {
-        sockStorageRef?.deallocate(capacity: 1)
+        sockStorageRef?.deallocate()
     }
 }
 

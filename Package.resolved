@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/vapor/clibressl.git",
         "state": {
           "branch": null,
-          "revision": "23ddb296981d17a8ee6c7418742a40cad5d2f9d0",
-          "version": "1.0.0"
+          "revision": "9ebe7fffd3f7d3cd3377696aeaa867a77f2418dd",
+          "version": "1.0.1"
         }
       }
     ]
