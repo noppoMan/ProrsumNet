@@ -179,26 +179,17 @@ public class Socket: SocketType {
         }
         
         var buf = Bytes(repeating: 0, count: numOfBytes)
-        var data = Bytes(repeating: 0, count: numOfBytes)
-        var bytesRead = sys_recv(fd, &buf, numOfBytes, 0)
-        data.insert(contentsOf: buf, at: 0)
-
-        guard bytesRead > -1, bytesRead <= numOfBytes else {
+        let bytesRead = sys_recv(fd, &buf, numOfBytes, 0)
+        
+        guard bytesRead > -1 else {
             throw SystemError.lastOperationError!
         }
         
         if bytesRead == 0 {
             isClosed = true
         }
-        else if bytesRead < numOfBytes {
-            while bytesRead < numOfBytes {
-                let read = bytesRead
-                bytesRead += sys_recv(fd, &buf, numOfBytes - bytesRead, 0)
-                data.insert(contentsOf: buf, at: read)
-            }
-        }
-
-        return Bytes(data[0..<bytesRead])
+        
+        return Bytes(buf[0..<bytesRead])
     }
     
     public func send(_ bytes: Bytes, deadline: Double = 0) throws {
