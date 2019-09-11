@@ -8,6 +8,13 @@
 
 import Foundation
 
+extension Data {
+
+    public static var empty: Data {
+        return Data()
+    }
+}
+
 public protocol DataRepresentable {
     var data: Data { get }
 }
